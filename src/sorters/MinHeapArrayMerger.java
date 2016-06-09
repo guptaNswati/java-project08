@@ -1,5 +1,6 @@
 package sorters;
 
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,98 +12,50 @@ public class MinHeapArrayMerger {
 	public static void mergeSortedArrays(int mEM_SIZE, ArrayList<Integer[]> fileChunksAsArrays, HeapTuple[] minHeap,
 			String string) {
 		
-		int indexInArray = 0;
-		ArrayList<Integer> sortedData = new ArrayList<Integer>();
+		int initialIndex = 0;
 		
 		// storing mins of all chunks in minHeap
 		for(int i = 0; i < fileChunksAsArrays.size(); i++)
 		{
-			minHeap[i] = new HeapTuple(fileChunksAsArrays.get(i)[indexInArray],i,indexInArray);			
+			minHeap[i] = new HeapTuple(fileChunksAsArrays.get(i)[initialIndex],i,initialIndex);			
 		}
 		
 		FHbinHeap<HeapTuple> currentHeap = new FHbinHeap<HeapTuple>(minHeap);		
-		FileWriter filewriter;
+		BufferedWriter  filewriter;
 		
-//		try 
-//		{
-//			filewriter = new FileWriter(string, true);
-			 int i = 0;
-			
+		try 
+		{
+			filewriter = new BufferedWriter(new FileWriter(string));
+			String newline = System.getProperty("line.separator");
+		
 			 while(!currentHeap.empty())
 			{			
 				HeapTuple currentMin = currentHeap.remove();
-				sortedData.add(currentMin.getData());
-				System.out.println(sortedData.get(i));
-//				System.out.println(currentMin);
+				filewriter.write(" " + currentMin.getData() + newline);
 				
 				int arrayIndex = currentMin.getArrayIndex();
-				System.out.println("array index " + arrayIndex);
 				Integer[] currentChunk = fileChunksAsArrays.get(arrayIndex);
-				System.out.println("current chunk size " + currentChunk.length);
 				
-				if(indexInArray < currentChunk.length)
+				// get the next element
+				int currentIndex = currentMin.getIndexInArray()+1;
+							
+				if(currentIndex < currentChunk.length)
 				{
-					int number = currentChunk[indexInArray];
-					currentHeap.insert(new HeapTuple(number,arrayIndex,indexInArray));				
+					int number = currentChunk[currentIndex];
+					currentHeap.insert(new HeapTuple(number,arrayIndex,currentIndex));						
 				}
-//				
-//				if(indexInArray > fileChunksAsArrays.get(arrayIndex).length)
-//				{
-//					fileChunksAsArrays.set(arrayIndex, null);		
-//				}
-				
-				indexInArray++;
-				
-				i++;
-			
-				
+				else
+					continue;																
+							
 			}
-			 System.out.println(" sorted list size " + sortedData.size());
-				
-//				sortedData.add(currentMin.getData());
-//				System.out.println(sortedData.get(i));
-//				filewriter.write(" " + currentMin.getData());							
-
-//				int arrayIndex = currentMin.getArrayIndex();
-//				
-//				Integer[] currentChunk = remove(fileChunksAsArrays.get(arrayIndex));
-//				int number = currentChunk[indexInArray];
-//				
-//				if(currentChunk.length == 1)
-//				{
-//					fileChunksAsArrays.remove(arrayIndex);
-//				}
-//			
-//				// adding the next big num from array which had the first min
-//				HeapTuple newMin = new HeapTuple(number,arrayIndex,indexInArray);
-//				currentHeap.insert(newMin);	
-//				i++;
-			}
-			
-//			for(int i = 0; i < sortedData.size(); i++)
-//			{
-				
-//			}
-
-//			filewriter.flush();
-//		} 
-//		catch (IOException e1) 
-//		{
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//	}
-	
-	private static Integer[] remove(Integer[] array)
-	{
-		if(array.length == 1)
+			filewriter.flush();
+		} 
+		catch (IOException e1) 
 		{
-			return array;
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		
-		ArrayList<Integer> a = new ArrayList<Integer>(Arrays.asList(array));
-		a.remove(0);
-		return array = a.toArray(new Integer[a.size()]);		
 	}
+	
 	
 }

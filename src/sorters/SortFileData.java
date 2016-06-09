@@ -30,8 +30,7 @@ public class SortFileData
 	 * The size of a chunk is determined by the size of the memory.
 	 */
 	private static int MEM_SIZE = 50;
-
-	private static final boolean ENABLE_DEBUG = false; // changed from false
+	private static final boolean ENABLE_DEBUG = false; 
 	private static final int OUTPUT_WIDTH = 70;
 	private static final String OUTPUT_SEPARATOR = "----------------------------------------------------------------------";
 
@@ -166,11 +165,10 @@ public class SortFileData
 		}
 
 		// Display the result of various chunks after sorting.
-//		displaySampleChunks(fileChunksAsArrays, numOfChunks); // commented out
+		displaySampleChunks(fileChunksAsArrays, numOfChunks); // commented out
 
 
 		// Phase 2. Use the min heap sorting techniques to sort all chunks ---------- 
-		// 
 		long startTime, estimatedTime;
 
 		// TODO: Use the minHeap technique we learned in modules to sort
@@ -179,17 +177,21 @@ public class SortFileData
 		// Note: In class MinHeapArrayMerger, we are *not* explicitly calling FHsort.heapSort.
 
 		// Use the array of HeapTuple objects called "minHeap" to hold the current minimums.
-		// In your RUN.txt file show a sample number of iterations.
-		HeapTuple[] minHeap = new HeapTuple[fileChunksAsArrays.size()];
+		// In your RUN.txt file show a sample number of iterations.		
+		int heapSize = MEM_SIZE;
 		
-		// insert current minimums in minHeap in MinHeapArrayMerger class and write the result in txt
-        // may be create an object of FHbinHeap<HeapTuple> 
+	    if (fileChunksAsArrays.size() < MEM_SIZE)
+	    {
+	        heapSize = fileChunksAsArrays.size();
+	    }
+	    
+	    HeapTuple[] minHeap = new HeapTuple[heapSize];
 		
 		// capture start time
 		startTime = System.nanoTime();
 
 		MinHeapArrayMerger.mergeSortedArrays(MEM_SIZE, fileChunksAsArrays, 
-				minHeap, filePath + "results_using_min_heap.txt"); // changed result to results
+				minHeap, filePath + "result_using_min_heap.txt"); // changed result to results
 
 		// stop and calculate elapsed time
 		estimatedTime = System.nanoTime() - startTime;
