@@ -165,7 +165,7 @@ public class SortFileData
 		}
 
 		// Display the result of various chunks after sorting.
-		displaySampleChunks(fileChunksAsArrays, numOfChunks); // commented out
+		displaySampleChunks(fileChunksAsArrays, numOfChunks); 
 
 
 		// Phase 2. Use the min heap sorting techniques to sort all chunks ---------- 

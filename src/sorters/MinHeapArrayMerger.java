@@ -18,36 +18,64 @@ public class MinHeapArrayMerger {
         int chunkSize;
         int numOfGroups = 0;
         int startingIndex = 0;
+        int lastIndex;
         
-        
-        ArrayList<Integer[]> subGroups = new  ArrayList<Integer[]>(); 
+        ArrayList<ArrayList<Integer[]>> subGroups = new ArrayList<ArrayList<Integer[]>>(); 
+        ArrayList<Integer[]> finalChunks = new ArrayList<Integer[]> ();
 		
 			 while(fileDataSize > 0)
 	            {
 	            	if (fileDataSize <= minHeap.length)
 	            	{
+	            		
 	            		chunkSize = fileDataSize;
+	            		System.out.println("chunk size inside if  " + chunkSize );
 	            		fileDataSize = 0;            		
 	            	}           	
 	            	else
 	            	{
 	            		chunkSize = minHeap.length;
-	            		fileDataSize = fileDataSize - minHeap.length;  
+	            		System.out.println("chunk size inside else  " + chunkSize);
+	            		fileDataSize = fileDataSize - minHeap.length; 
+	            		System.out.println(" file size inside else " + fileDataSize);
 	            	}
 	            	
-	            	ArrayList<Integer[]> chunk = new ArrayList<Integer[]> ();
+	            	ArrayList<Integer[]> chunk = new ArrayList<Integer[]>();
 	            	
-	            	for(int i = startingIndex; i < startingIndex + chunkSize; i++)
-	            	{
-	            	
+	            	lastIndex = startingIndex + chunkSize;
+	            	System.out.println("last index " + lastIndex);
+	            	for(int i = startingIndex; i < lastIndex ; i++)
+	            	{	            	
 	            		chunk.add(fileChunksAsArrays.get(i));
-	            	}            	
-	            	subGroups.add(heapSortAndMerge(chunk, minHeap));	            	
-	            	startingIndex += chunkSize;                       	
+	            	} 
+	            	
+	            	System.out.println("chunk size  " + chunkSize );
+	            	subGroups.add(chunk);
+//	            	subGroups.add(heapSortAndMerge(chunk, minHeap));	            	
+	            	startingIndex += chunkSize; 
+	            	
+	            	System.out.println("strating index " + startingIndex);
+	            	
 	            	numOfGroups++;
 	            }
 			 
-			    Integer[] sortedArray = heapSortAndMerge(subGroups, minHeap);			 
+			 System.out.println("sub groups size " + subGroups.size());
+			 
+			 for(int i = 0; i < subGroups.size(); i++)
+			 {
+				 Integer[] sortedArray = heapSortAndMerge(subGroups.get(i));
+				 System.out.println("sorted array size " + sortedArray.length);
+				 finalChunks.add(sortedArray);
+			 }
+			 
+			 Integer[] finalArray = heapSortAndMerge(finalChunks);
+			 
+//			 for(int i = 0; i < finalArray.length; i++)
+//					{
+//						System.out.println(finalArray[i]);
+//						
+//					}
+	 
 				BufferedWriter  filewriter;			 
 				
 				try 
@@ -55,9 +83,9 @@ public class MinHeapArrayMerger {
 					filewriter = new BufferedWriter(new FileWriter(string));
 					String newline = System.getProperty("line.separator");
 					
-					for(int i = 0; i < sortedArray.length; i++)
+					for(int i = 0; i < finalArray.length; i++)
 					{						
-							filewriter.write(" " + sortedArray[i] + newline);												
+							filewriter.write(" " + finalArray[i] + newline);												
 					}
 					
 					filewriter.flush();
@@ -70,18 +98,28 @@ public class MinHeapArrayMerger {
 			
 		}
 
-	public static Integer[] heapSortAndMerge(ArrayList<Integer[]> chunk, HeapTuple[] minHeap )
+	public static Integer[] heapSortAndMerge(ArrayList<Integer[]> chunk)
 	{
 		int initialIndex = 0;
 		ArrayList<Integer> sortedChunks = new ArrayList<Integer>();
+		FHbinHeap<HeapTuple> currentHeap = new FHbinHeap<HeapTuple>();
 
+//		if(chunk.size() < minHeap.length)
+//		{
+//			for(int i = 0; i < chunk.size(); i++)
+//			{			
+//				currentHeap.insert(new HeapTuple(chunk.get(i)[initialIndex],i,initialIndex));
+//			}			
+//			
+//		}
+//		else
 		// storing mins of all chunks in minHeap
 		for(int i = 0; i < chunk.size(); i++)
 		{
-			minHeap[i] = new HeapTuple(chunk.get(i)[initialIndex],i,initialIndex);			
+			currentHeap.insert(new HeapTuple(chunk.get(i)[initialIndex],i,initialIndex));			
 		}
 
-		FHbinHeap<HeapTuple> currentHeap = new FHbinHeap<HeapTuple>(minHeap);		
+//		currentHeap = (minHeap);		
 			while(!currentHeap.empty())
 			{			
 				HeapTuple currentMin = currentHeap.remove();
@@ -89,6 +127,7 @@ public class MinHeapArrayMerger {
 				sortedChunks.add(currentMin.getData());
 
 				int arrayIndex = currentMin.getArrayIndex();
+				
 				Integer[] currentChunk = chunk.get(arrayIndex);
 
 				// get the next element
@@ -103,6 +142,12 @@ public class MinHeapArrayMerger {
 					continue;																
 			}
 			Integer[] sortedArray = sortedChunks.toArray(new Integer[sortedChunks.size()]);
+			
+//			for(int i = 0; i < sortedArray.length; i++)
+//			{
+//				System.out.println(sortedArray[i]);
+//				
+//			}
 			return sortedArray;
 	}
 
