@@ -6,8 +6,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+ * Reads the numbers from file and puts them in an array.
+ * Then splits the array according to the given memory size
+ * adds the chunks to the chunks array.
+ * @author swati
+ *
+ */
 public class SimulateChunks {
 
+	/**
+	 * 
+	 * @param mEM_SIZE a final int for the simulated memory size
+	 * @param file a String object for the name of the input file
+	 * @param fileChunksAsArrays an ArrayList of Integer[] objects that holds chunks of arrays of integers.
+	 */
 	public static void splitFileIntoArrayChunks(int mEM_SIZE, String file, ArrayList<Integer[]> fileChunksAsArrays) {
 		// TODO Auto-generated method stub
 		

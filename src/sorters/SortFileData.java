@@ -2,7 +2,6 @@ package sorters;
 
 /**
  * Reads multiple plain text files, which contain unsorted numbers.
- * 
  * Sorts the input files by dividing them into multiple chunks.
  * Note: Each chunk size is determined by the size of memory.
  * 
@@ -16,7 +15,7 @@ package sorters;
  *          Suggestion: Take advantage of the logic from our heap sorting algorithm
  *          we studied in modules.
  *          
- * @author Foothill College, [YOUR NAME HERE]
+ * @author Foothill College, [Swati]
  */
 
 import java.util.ArrayList;
