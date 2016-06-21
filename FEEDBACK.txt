@@ -1,0 +1,13 @@
+FEEDBACK:
+
+Excellent use of optimizing the sorting algorithm in Phase 1 based on MEM_SIZE!
+
+
+Good use of HeapTuple in class MinHeapArrayMerger.
+
+
+-0 For future make sure that your output (such as in result_using_min_heap.txt) matches
+   the example provided in project description.
+   
+-Bita.
+
